@@ -1,0 +1,22 @@
+
+Comparacoes: 2 | Tempo: 0.000000s
+Comparacoes: 1 | Tempo: 0.000000s
+Comparacoes: 1 | Tempo: 0.000000s
+Comparacoes: 2 | Tempo: 0.000000s
+Comparacoes: 2 | Tempo: 0.000000s
+Comparacoes: 2 | Tempo: 0.000000s
+Comparacoes: 8 | Tempo: 0.000000s
+Comparacoes: 8 | Tempo: 0.000000s
+Comparacoes: 8 | Tempo: 0.000000s
+Comparacoes: 9 | Tempo: 0.000000s
+Comparacoes: 1 | Tempo: 0.000000s
+Comparacoes: 1 | Tempo: 0.000000s
+Comparacoes: 5 | Tempo: 0.000000s
+Comparacoes: 3 | Tempo: 0.001000s
+Comparacoes: 4 | Tempo: 0.000000s
+Comparacoes: 4 | Tempo: 0.000000s
+Comparacoes: 6 | Tempo: 0.000000s
+Comparacoes: 5 | Tempo: 0.001000s
+Comparacoes: 4 | Tempo: 0.000000s
+Comparacoes: 4 | Tempo: 0.000000s
+Comparacoes: 3 | Tempo: 0.000000s

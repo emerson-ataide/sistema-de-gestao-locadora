@@ -1,0 +1,97 @@
+
+#ifndef ENTIDADES_H_INCLUDED
+#define ENTIDADES_H_INCLUDED
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+// ##################################### DECLARAÇÕES ENTIDADE FILME #####################################
+
+typedef struct Filme {
+    int id;
+    char titulo[100];
+    char genero[50];
+} TFilme;
+
+int tamanho_registroFilme();
+
+TFilme* filme(int id, char *titulo, char *genero);
+
+void salvaFilme(TFilme *filme, FILE *out);
+
+TFilme* leFilme(FILE *in);
+
+void imprimirFilme(TFilme *filme);
+
+void criarBaseFilme(FILE *out, int tam);
+
+void imprimirBaseFilme(FILE *out);
+
+int tamanho_arquivoFilme(FILE *arq);
+
+void shuffleFilme(int *vet, int TAM);
+
+
+// ##################################### DECLARAÇÕES ENTIDADE CLIENTE #####################################
+
+typedef struct Cliente {
+    int id;
+    char nome[100];
+    char cpf[15];
+    char telefone[20];
+} TCliente;
+
+int tamanho_registroCliente();
+
+TCliente* cliente(int id, char *nome, char *cpf, char *telefone);
+
+void salvaCliente(TCliente *cliente, FILE *out);
+
+TCliente* leCliente(FILE *in);
+
+void imprimirCliente(TCliente *cliente);
+
+void criarBaseCliente(FILE *out, int tam);
+
+void imprimirBaseCliente(FILE *out);
+
+int tamanho_arquivoCliente(FILE *arq);
+
+void shuffleCliente(int *vet, int TAM);
+
+
+// ##################################### DECLARAÇÕES ENTIDADE LOCACAO #####################################
+
+typedef struct Locacao {
+    int id;
+    int idCliente;
+    int idFilme;
+    char dataLocacao[11];   // formato "YYYY-MM-DD"
+    char dataDevolucao[11]; // prevista
+    char dataDevolvida[11]; // real, para calcular atraso
+    char status[30];
+    double multa;           // valor da multa (0 se não houver)
+    int devolvido;          // 0 - não devolvido, 1 - devolvido
+} TLocacao;
+
+int tamanho_registroLocacao();
+
+TLocacao* locacao(int id, int idFilme, int idCliente, char *dataLocacao, char *dataDevolucao, int devolvido);
+
+void salvaLocacao(TLocacao *locacao, FILE *out);
+
+TLocacao* leLocacao(FILE *in);
+
+void imprimirLocacao(TLocacao *locacao);
+
+void criarBaseLocacao(FILE *out, int tam);
+
+void imprimirBaseLocacao(FILE *arqLocacoes, FILE *arqClientes, FILE *arqFilmes);
+
+int tamanho_arquivoLocacao(FILE *arq);
+
+void shuffleLocacao(int *vet, int TAM);
+
+#endif
