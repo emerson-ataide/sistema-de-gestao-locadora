@@ -1,6 +1,6 @@
-#include "busca_sequencial.h"
 #include <time.h>
 #include <stdio.h>
+#include "busca_sequencial.h"
 
 void salvarDadosSequencial(int comparacoes, double tempoExecucao) {
     FILE *log = fopen("log_sequencial.txt", "a");

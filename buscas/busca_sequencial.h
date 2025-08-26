@@ -1,12 +1,13 @@
-#ifndef BUSCA_BINARIA_H
-#define BUSCA_BINARIA_H
+#ifndef BUSCA_SEQUENCIAL_H
+#define BUSCA_SEQUENCIAL_H
 
 #include <stdio.h>
 #include "../Entidades/entidades.h"
 
-// Funções para busca binária em arquivo, recebendo o arquivo, o id e o tamanho da base (número de registros)
-TCliente* buscaBinariaCliente(FILE *arq, int id, int tamanho);
-TFilme* buscaBinariaFilme(FILE *arq, int id, int tamanho);
-TLocacao* buscaBinariaLocacao(FILE *arq, int id, int tamanho);
+// Declarações das funções de busca sequencial
+TCliente* buscaSequencialCliente(FILE *arq, int id);
+TFilme* buscaSequencialFilme(FILE *arq, int id);
+TLocacao* buscaSequencialLocacao(FILE *arq, int id);
+void salvarDadosSequencial(int comparacoes, double tempoExecucao);
 
 #endif

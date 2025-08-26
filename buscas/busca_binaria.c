@@ -1,7 +1,7 @@
-#include "busca_binaria.h"
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+#include "busca_binaria.h"
 
 void salvarDadosBinaria(int comparacoes, double tempoExecucao) {
     FILE *log = fopen("log_binaria.txt", "a");

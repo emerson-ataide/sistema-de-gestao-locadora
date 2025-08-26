@@ -1,19 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Console/menuConsole.c"
-#include "Ordenacao/selection_sort.h"  
+#include "Entidades/filme.c"
+#include "Entidades/locacao.c"
+#include "Entidades/cliente.c"
+#include "OrdenacaoExterna/classificacao.c"
+#include "OrdenacaoExterna/intercalacao.c"
+#include "buscas/busca_binaria.c"
+#include "buscas/busca_sequencial.c"
+#include "Ordenacao/selection_sort.c"
+#include "hash/hash.c"
+
 
 int main() {
     system("mkdir ArquivosDat >nul 2>nul");
 
     FILE *arqClientes = fopen("ArquivosDat/clientes.dat", "w+b");
     FILE *arqFilmes = fopen("ArquivosDat/filmes.dat", "w+b");
-    FILE *arqLocacoes = fopen("ArquivosDat/locacoes.dat", "a+b");
+    FILE *arqLocacoes = fopen("ArquivosDat/locacoes.dat", "w+b");
+    FILE *arqHash = fopen("ArquivosDat/hash.dat", "w+b");
 
-    if (!arqClientes || !arqFilmes || !arqLocacoes) {
-        printf("Erro ao abrir arquivos.\n");
-        return 1;
+    if (arqClientes == NULL || arqFilmes == NULL || arqLocacoes == NULL || arqHash == NULL)
+    {
+        printf("Erro ao abrir um dos arquivos\n");
+        exit(1);
     }
+
+    inicializarTabelaHash(arqHash);
 
     int op, tamClientes, tamFilmes;
 
@@ -53,11 +66,12 @@ int main() {
     }
 
     // Chama o menu principal (onde as buscas e demais funções estão)
-    exibirMenuPrincipal(arqClientes, arqFilmes, arqLocacoes);
+    exibirMenuPrincipal(arqClientes, arqFilmes, arqLocacoes, arqHash);
 
     fclose(arqClientes);
     fclose(arqFilmes);
     fclose(arqLocacoes);
+    fclose(arqHash);
 
     return 0;
 }

@@ -1,4 +1,3 @@
-
 #include "entidades.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,6 +22,7 @@ TLocacao* locacao(int id, int idFilme, int idCliente, char *dataLocacao, char *d
 }
 
 void salvaLocacao(TLocacao *loc, FILE *out) {
+    fseek(out, 0, SEEK_END);
     fwrite(loc, sizeof(TLocacao), 1, out);
 }
 
@@ -32,6 +32,26 @@ TLocacao* leLocacao(FILE *in) {
     free(l);
     return NULL;
 }
+
+// Função auxiliar: calcula o total aproximado de dias desde o "início"
+int diasDesdeInicioSimples(int dia, int mes, int ano) {
+    return dia + mes * 30 + ano * 365;
+}
+
+// Função principal: calcula diferença aproximada entre duas datas no formato "YYYY-MM-DD"
+int diferencaDiasSimples(char *data1, char *data2) {
+    int d1, m1, a1;
+    int d2, m2, a2;
+
+    sscanf(data1, "%4d-%2d-%2d", &a1, &m1, &d1);
+    sscanf(data2, "%4d-%2d-%2d", &a2, &m2, &d2);
+
+    int totalDias1 = diasDesdeInicioSimples(d1, m1, a1);
+    int totalDias2 = diasDesdeInicioSimples(d2, m2, a2);
+
+    return abs(totalDias2 - totalDias1);
+}
+
 
 // NOVA IMPLEMENTAÇÃO substituindo imprimirBaseLocacao
 void imprimirBaseLocacao(FILE *arqLocacoes, FILE *arqClientes, FILE *arqFilmes) {
@@ -66,17 +86,17 @@ void imprimirBaseLocacao(FILE *arqLocacoes, FILE *arqClientes, FILE *arqFilmes) 
         printf("Filme: %s\n", f ? f->titulo : "Nao encontrado");
         printf("Data Locacao: %s\n", l->dataLocacao);
         printf("Data Devolucao: %s\n", l->dataDevolucao);
-        printf("Status: %s\n", l->status);
-        printf("Multa: %.2f\n", l->multa);
+
+        int dias = diferencaDiasSimples(l->dataLocacao, l->dataDevolucao);
+        double valor = dias * 2.0;
+        printf("Valor da locacao: R$%.2f (%d dias)\n", valor, dias);
+
         printf("-------------------------\n");
 
         free(l);
         if (c) free(c);
         if (f) free(f);
     }
-    rewind(arqLocacoes);
-    rewind(arqClientes);
-    rewind(arqFilmes);
 }
 
 void criarBaseLocacao(FILE *out, int tam) {

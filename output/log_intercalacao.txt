@@ -1,0 +1,138 @@
+Comparacoes: 340
+Tempo de execucao: 0.15 segundos
+Comparacoes: 308
+Tempo de execucao: 0.17 segundos
+Comparacoes: 308
+Tempo de execucao: 0.17 segundos
+Comparacoes: 308
+Tempo de execucao: 0.10 segundos
+Comparacoes: 308
+Tempo de execucao: 0.10 segundos
+Comparacoes: 308
+Tempo de execucao: 0.11 segundos
+Comparacoes: 308
+Tempo de execucao: 0.10 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.10 segundos
+Comparacoes: 308
+Tempo de execucao: 0.11 segundos
+Comparacoes: 308
+Tempo de execucao: 0.11 segundos
+Comparacoes: 308
+Tempo de execucao: 1.01 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.33 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.07 segundos
+Comparacoes: 308
+Tempo de execucao: 0.07 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.13 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.23 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.07 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.10 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.07 segundos
+Comparacoes: 308
+Tempo de execucao: 0.10 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.09 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.11 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.08 segundos
+Comparacoes: 308
+Tempo de execucao: 0.07 segundos
+Comparacoes: 308
+Tempo de execucao: 0.05 segundos
+Comparacoes: 308
+Tempo de execucao: 0.05 segundos
+Comparacoes: 308
+Tempo de execucao: 0.07 segundos
+Comparacoes: 308
+Tempo de execucao: 0.06 segundos
+Comparacoes: 308
+Tempo de execucao: 0.05 segundos
+Comparacoes: 308
+Tempo de execucao: 0.05 segundos
+Comparacoes: 280
+Tempo de execucao: 0.13 segundos
+****************************
+Intercalacao Otima - TCliente:
+Numero de comparacoes: 281
+Tempo de execucao: 0.12 segundos
+****************************
+
+****************************
+Intercalacao Otima - TCliente:
+Numero de comparacoes: 222
+Tempo de execucao: 0.06 segundos
+****************************
+
+****************************
+Intercalacao Otima - TCliente:
+Numero de comparacoes: 287
+Tempo de execucao: 0.14 segundos
+****************************
+

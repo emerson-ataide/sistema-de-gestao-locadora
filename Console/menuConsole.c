@@ -1,15 +1,17 @@
-
 #include "menuConsole.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "../Entidades/filme.c"
-#include "../Entidades/locacao.c"
-#include "../Entidades/cliente.c"
-#include "../buscas/busca_binaria.c"    
-#include "../buscas/busca_sequencial.c"
-#include "../Ordenacao/selection_sort.c"
+#include "../Entidades/entidades.h"
+#include "../buscas/busca_binaria.h"
+#include "../buscas/busca_sequencial.h"
+#include "../OrdenacaoExterna/intercalacao.h"
+#include "../OrdenacaoExterna/classificacao.h"
+#include "../Ordenacao/selection_sort.h"
+#include "menuHash.c"
+#include "menuHash.h"
+
 
 // Função para calcular quantos registros tem no arquivo
 int tamanhoArquivo(FILE *arq, size_t tamanhoRegistro) {
@@ -19,7 +21,7 @@ int tamanhoArquivo(FILE *arq, size_t tamanhoRegistro) {
     return (int)(tamanhoArquivo / tamanhoRegistro);
 }
 
-void exibirMenuPrincipal(FILE *arqClientes, FILE *arqFilmes, FILE *arqLocacoes) {
+void exibirMenuPrincipal(FILE *arqClientes, FILE *arqFilmes, FILE *arqLocacoes, FILE *arqHash) {
     int opcao;
     do {
         printf("\n=========== MENU PRINCIPAL ===========\n");
@@ -28,6 +30,8 @@ void exibirMenuPrincipal(FILE *arqClientes, FILE *arqFilmes, FILE *arqLocacoes) 
         printf("[3] Realizar busca\n");
         printf("[4] Ordenar bases com Selection Sort\n");
         printf("[5] Imprimir bases\n");
+        printf("[6] Ordenacao Externa\n");
+        printf("[7] Operacoes Hash\n");
         printf("[0] Sair\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
@@ -125,7 +129,7 @@ void exibirMenuPrincipal(FILE *arqClientes, FILE *arqFilmes, FILE *arqLocacoes) 
                             }
                             break;
                         }
-                        
+
                         case 3: {
                             TLocacao *l = buscaSequencialLocacao(arqLocacoes, idBusca);
                             if (l) {
@@ -163,7 +167,7 @@ void exibirMenuPrincipal(FILE *arqClientes, FILE *arqFilmes, FILE *arqLocacoes) 
                             }
                             break;
                         }
-                    
+
                         case 3: {
                             n = tamanhoArquivo(arqLocacoes, sizeof(TLocacao));
                             TLocacao *l = buscaBinariaLocacao(arqLocacoes, idBusca, n);
@@ -198,6 +202,89 @@ void exibirMenuPrincipal(FILE *arqClientes, FILE *arqFilmes, FILE *arqLocacoes) 
                 imprimirBaseCliente(arqClientes);
                 printf("\n========== BASE DE FILMES ==========\n");
                 imprimirBaseFilme(arqFilmes);
+                break;
+
+            case 6: { //  Ordenação Externa
+                int subOpcao;
+                int M = 7; // M agora está fixo em 7
+                int numParticoes;
+
+                printf("\n--- Ordenacao Externa ---\n");
+                printf("[1] Gerar particoes e classificar por Selecao Natural\n");
+                printf("[2] Intercalar por Intercalaco Otima\n");
+                printf("[3] Voltar\n");
+                printf("Escolha uma opcao: ");
+                scanf("%d", &subOpcao);
+
+                if (subOpcao == 1) {
+                    printf("\n[1] Base de dados de clientes\n");
+                    printf("[2] Voltar\n");
+                    printf("Escolha uma opcao: ");
+                    scanf("%d", &opcao);
+
+                    if (opcao == 1) {
+                        // A-se o valor de M
+                        printf("Valor de M fixado em %d.\n", M);
+
+                        // Cria o diretório de partições, se não existir
+                        #ifdef _WIN32
+                            system("mkdir particoes > nul 2>nul");
+                        #else
+                            system("mkdir -p particoes");
+                        #endif
+
+                        numParticoes = selecaoNaturalCliente(arqClientes, M);
+
+                        // Salva numParticoes em um arquivo temporário
+                        FILE *temp = fopen("num_particoes.tmp", "w");
+                        if (temp != NULL) {
+                            fprintf(temp, "%d", numParticoes);
+                            fclose(temp);
+                        }
+
+                        if (numParticoes > 0) {
+                            printf("Particoes geradas com sucesso: %d particoes.\n", numParticoes);
+                        } else {
+                            printf("Erro ao gerar partições.\n");
+                        }
+                    } else if (opcao == 2) {
+                        break; // Voltar ao menu principal
+                    } else {
+                        printf("Opcao invalida.\n");
+                    }
+                }
+                else if (subOpcao == 2) {
+                    int n, numParticoes;
+
+                    // Lê o número de partições salvas anteriormente
+                    FILE *temp = fopen("num_particoes.tmp", "r");
+                    if (temp != NULL) {
+                        fscanf(temp, "%d", &numParticoes);
+                        fclose(temp);
+                    } else {
+                        printf("Erro: numero de particoes nao encontrado. Gere as particoes primeiro.\n");
+                        break;
+                    }
+
+                    printf("Digite o numero de registros que foram gerados na base: ");
+                    scanf("%d", &n);
+
+                    // Intercala partições para gerar arquivo final ordenado
+                    intercalacaoOtimaCliente(numParticoes, n);
+                    printf("Intercalacao realizada com sucesso.\n");
+                }
+                else if (subOpcao == 3) {
+                    break; // Voltar ao menu principal
+                }
+                else {
+                    printf("Opção invalida.\n");
+                }
+
+                break;
+            }
+
+            case 7:
+                menuHash(arqClientes, arqHash);
                 break;
 
             case 0:
