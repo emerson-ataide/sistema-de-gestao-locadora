@@ -1,1 +1,4 @@
 Comparacoes: 1540 | Tempo: 0.000000s
+Comparacoes: 4950 | Tempo: 0.019000s
+Comparacoes: 561 | Tempo: 0.000000s
+Comparacoes: 4950 | Tempo: 0.021000s

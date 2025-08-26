@@ -40,6 +40,13 @@ int main() {
     criarBaseCliente(arqClientes, tamClientes);
     criarBaseFilme(arqFilmes, tamFilmes);
 
+    // ##### CORREÇÃO APLICADA AQUI #####
+    printf("\nPopulando a tabela hash com os clientes iniciais...\n");
+    popularHashComClientesIniciais(arqHash, arqClientes); // Chama a nova função dedicada
+    printf("Tabela hash populada com sucesso!\n");
+    // ##### FIM DA CORREÇÃO #####
+
+
     printf("\nDeseja imprimir os dados criados? [1] Sim [2] Nao: ");
     scanf("%d", &op);
     if (op == 1) {

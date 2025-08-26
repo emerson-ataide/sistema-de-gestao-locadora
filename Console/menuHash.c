@@ -8,10 +8,11 @@ void menuHash(FILE *arqClientes, FILE *arqHash) {
 
     do {
         printf("\n====== MENU HASH ======\n");
-        printf("1. Buscar cliente\n");
-        printf("2. Inserir cliente\n");
-        printf("3. Remover cliente\n");
-        printf("0. Voltar\n");
+        printf("[1] Buscar cliente\n");
+        printf("[2] Inserir cliente\n");
+        printf("[3] Remover cliente\n");
+        printf("[4] Imprimir Tabela Hash\n");
+        printf("[0] Voltar\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
@@ -30,8 +31,18 @@ void menuHash(FILE *arqClientes, FILE *arqHash) {
                 break;
 
             case 2:
-                printf("Digite o codigo do cliente: ");
+                printf("Digite o codigo (ID) do cliente: ");
                 scanf("%d", &cliente.id);
+
+                // VERIFICA SE O CLIENTE JÁ EXISTE
+                TCliente *existente = buscarHash(arqHash, arqClientes, cliente.id);
+                if (existente != NULL) {
+                    printf("\nERRO: Um cliente com o ID %d ja existe!\n", cliente.id);
+                    free(existente); // Libera a memória do cliente encontrado na busca
+                    break;           // Volta para o menu
+                }
+
+                // Se não existe, continua o cadastro
                 printf("Digite o nome: ");
                 scanf(" %[^\n]", cliente.nome);
                 printf("Digite o CPF: ");
@@ -47,6 +58,10 @@ void menuHash(FILE *arqClientes, FILE *arqHash) {
                 scanf("%d", &codigo);
                 removerHash(arqHash, codigo);
                 printf("Cliente removido com sucesso!\n");
+                break;
+            
+            case 4:
+                imprimirHash(arqHash); // Chamada atualizada
                 break;
         }
     } while(opcao != 0);

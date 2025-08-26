@@ -7,7 +7,7 @@ void inicializarTabelaHash(FILE *arqHash) {
     reg.codigo = -1;
     reg.posicao = -1;
     reg.proximo = -1;
-
+    
     for(int i = 0; i < TAMANHO_TABELA; i++) {
         fseek(arqHash, i * sizeof(RegistroHash), SEEK_SET);
         fwrite(&reg, sizeof(RegistroHash), 1, arqHash);
@@ -18,19 +18,24 @@ int funcaoHash(int chave) {
     return chave % TAMANHO_TABELA;
 }
 
+// VERSÃO CORRIGIDA
 void inserirHash(FILE *arqHash, FILE *arqCliente, TCliente cliente) {
     int pos = funcaoHash(cliente.id);
     RegistroHash reg;
-    
-    fseek(arqHash, pos * sizeof(RegistroHash), SEEK_SET);
+    long posRegistroAtual = pos * sizeof(RegistroHash);
+
+    fseek(arqHash, posRegistroAtual, SEEK_SET);
     fread(&reg, sizeof(RegistroHash), 1, arqHash);
-    
-    if(reg.codigo != -1) {
+
+    if(reg.codigo != -1) { // Colisão
+        // Encontra o final da lista encadeada
         while(reg.proximo != -1) {
-            fseek(arqHash, reg.proximo * sizeof(RegistroHash), SEEK_SET);
+            posRegistroAtual = reg.proximo * sizeof(RegistroHash);
+            fseek(arqHash, posRegistroAtual, SEEK_SET);
             fread(&reg, sizeof(RegistroHash), 1, arqHash);
         }
-        
+
+        // Encontra o próximo espaço livre na área de overflow
         int novaPosicao = TAMANHO_TABELA;
         RegistroHash regTemp;
         while(1) {
@@ -40,22 +45,25 @@ void inserirHash(FILE *arqHash, FILE *arqCliente, TCliente cliente) {
             }
             novaPosicao++;
         }
-        
+
+        // Linka o último nó da lista ao novo espaço livre
         reg.proximo = novaPosicao;
-        fseek(arqHash, -sizeof(RegistroHash), SEEK_CUR);
+        fseek(arqHash, posRegistroAtual, SEEK_SET); // Volta para a posição do último nó
         fwrite(&reg, sizeof(RegistroHash), 1, arqHash);
-        
-        pos = novaPosicao;
+
+        pos = novaPosicao; // A nova inserção ocorrerá na área de overflow
     }
-    
+
+    // Insere o cliente no final do arquivo de dados
     fseek(arqCliente, 0, SEEK_END);
     long posicaoCliente = ftell(arqCliente);
     salvaCliente(&cliente, arqCliente);
-    
+
+    // Prepara e escreve o novo registro na tabela hash
     reg.codigo = cliente.id;
     reg.posicao = posicaoCliente;
     reg.proximo = -1;
-    
+
     fseek(arqHash, pos * sizeof(RegistroHash), SEEK_SET);
     fwrite(&reg, sizeof(RegistroHash), 1, arqHash);
 }
@@ -118,5 +126,94 @@ void removerHash(FILE *arqHash, int codigo) {
         anterior = reg;
         fseek(arqHash, reg.proximo * sizeof(RegistroHash), SEEK_SET);
         fread(&reg, sizeof(RegistroHash), 1, arqHash);
+    }
+}
+
+void imprimirHash(FILE *arqHash) {
+    printf("\n--- IMPRESSAO DA TABELA HASH ---\n");
+    RegistroHash reg;
+
+    for (int i = 0; i < TAMANHO_TABELA; i++) {
+        printf("Compartimento [%d]: ", i);
+        fseek(arqHash, i * sizeof(RegistroHash), SEEK_SET);
+        fread(&reg, sizeof(RegistroHash), 1, arqHash);
+
+        if (reg.codigo == -1) {
+            printf("Vazio\n");
+            continue;
+        }
+
+        int proximo = i;
+        int primeiro = 1;
+        while (proximo != -1) {
+            if (!primeiro) {
+                printf(" -> ");
+            }
+            fseek(arqHash, proximo * sizeof(RegistroHash), SEEK_SET);
+            fread(&reg, sizeof(RegistroHash), 1, arqHash);
+
+            if (reg.codigo != -1) {
+                printf("ID %d", reg.codigo);
+            }
+            proximo = reg.proximo;
+            primeiro = 0;
+        }
+        printf("\n");
+    }
+    printf("--- FIM DA TABELA HASH ---\n");
+}
+
+// VERSÃO CORRIGIDA
+void popularHashComClientesIniciais(FILE *arqHash, FILE *arqClientes) {
+    rewind(arqClientes);
+    TCliente *c;
+    long posCliente;
+
+    while (1) {
+        posCliente = ftell(arqClientes);
+        c = leCliente(arqClientes);
+        if (c == NULL) {
+            break;
+        }
+
+        int posHash = funcaoHash(c->id);
+        RegistroHash reg;
+        long posRegistroAtual = posHash * sizeof(RegistroHash);
+
+        fseek(arqHash, posRegistroAtual, SEEK_SET);
+        fread(&reg, sizeof(RegistroHash), 1, arqHash);
+
+        if (reg.codigo != -1) { // Colisão
+            while (reg.proximo != -1) {
+                posRegistroAtual = reg.proximo * sizeof(RegistroHash);
+                fseek(arqHash, posRegistroAtual, SEEK_SET);
+                fread(&reg, sizeof(RegistroHash), 1, arqHash);
+            }
+
+            int novaPosicaoOverflow = TAMANHO_TABELA;
+            RegistroHash regTemp;
+            while (1) {
+                fseek(arqHash, novaPosicaoOverflow * sizeof(RegistroHash), SEEK_SET);
+                if (fread(&regTemp, sizeof(RegistroHash), 1, arqHash) != 1 || regTemp.codigo == -1) {
+                    break;
+                }
+                novaPosicaoOverflow++;
+            }
+
+            reg.proximo = novaPosicaoOverflow;
+            fseek(arqHash, posRegistroAtual, SEEK_SET); // Volta para a posição do último nó
+            fwrite(&reg, sizeof(RegistroHash), 1, arqHash);
+
+            posHash = novaPosicaoOverflow;
+        }
+
+        reg.codigo = c->id;
+        reg.posicao = posCliente;
+        reg.proximo = -1;
+
+        fseek(arqHash, posHash * sizeof(RegistroHash), SEEK_SET);
+        fwrite(&reg, sizeof(RegistroHash), 1, arqHash);
+
+        free(c);
     }
 }
