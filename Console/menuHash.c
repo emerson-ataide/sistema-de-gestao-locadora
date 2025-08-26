@@ -12,7 +12,7 @@ void menuHash(FILE *arqClientes, FILE *arqHash) {
         printf("[2] Inserir cliente\n");
         printf("[3] Remover cliente\n");
         printf("[4] Imprimir Tabela Hash\n");
-        printf("[0] Voltar\n");
+        printf("[5] Voltar\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
@@ -34,15 +34,13 @@ void menuHash(FILE *arqClientes, FILE *arqHash) {
                 printf("Digite o codigo (ID) do cliente: ");
                 scanf("%d", &cliente.id);
 
-                // VERIFICA SE O CLIENTE JÁ EXISTE
                 TCliente *existente = buscarHash(arqHash, arqClientes, cliente.id);
                 if (existente != NULL) {
                     printf("\nERRO: Um cliente com o ID %d ja existe!\n", cliente.id);
-                    free(existente); // Libera a memória do cliente encontrado na busca
-                    break;           // Volta para o menu
+                    free(existente); 
+                    break;           
                 }
 
-                // Se não existe, continua o cadastro
                 printf("Digite o nome: ");
                 scanf(" %[^\n]", cliente.nome);
                 printf("Digite o CPF: ");
@@ -54,14 +52,18 @@ void menuHash(FILE *arqClientes, FILE *arqHash) {
                 break;
 
             case 3:
-                printf("Digite o codigo do cliente: ");
+                printf("Digite o codigo do cliente a ser removido: ");
                 scanf("%d", &codigo);
-                removerHash(arqHash, codigo);
-                printf("Cliente removido com sucesso!\n");
+                // VERIFICA O RETORNO DA FUNÇÃO REMOVER
+                if (removerHash(arqHash, codigo)) {
+                    printf("Cliente removido com sucesso!\n");
+                } else {
+                    printf("ERRO: Cliente com ID %d nao encontrado.\n", codigo);
+                }
                 break;
             
             case 4:
-                imprimirHash(arqHash); // Chamada atualizada
+                imprimirHash(arqHash);
                 break;
         }
     } while(opcao != 0);
