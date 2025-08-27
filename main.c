@@ -40,11 +40,10 @@ int main() {
     criarBaseCliente(arqClientes, tamClientes);
     criarBaseFilme(arqFilmes, tamFilmes);
 
-    // ##### CORREÇÃO APLICADA AQUI #####
-    printf("\nPopulando a tabela hash com os clientes iniciais...\n");
-    popularHashComClientesIniciais(arqHash, arqClientes); // Chama a nova função dedicada
-    printf("Tabela hash populada com sucesso!\n");
-    // ##### FIM DA CORREÇÃO #####
+    printf("\nPreenchendo a tabela hash com os clientes iniciais...\n");
+    popularHashComClientesIniciais(arqHash, arqClientes); 
+    printf("Tabela hash preenchida com sucesso!\n");
+   
 
 
     printf("\nDeseja imprimir os dados criados? [1] Sim [2] Nao: ");
@@ -56,7 +55,6 @@ int main() {
         imprimirBaseFilme(arqFilmes);
     }
 
-     // *** PERGUNTA SOBRE ORDENAÇÃO COM SELECTION SORT ***
     printf("\nDeseja ordenar as bases com Selection Sort? [1] Sim [2] Nao: ");
     scanf("%d", &op);
 
@@ -72,7 +70,7 @@ int main() {
         printf("Arquivos nao foram ordenados. Busca binaria pode nao funcionar corretamente.\n");
     }
 
-    // Chama o menu principal (onde as buscas e demais funções estão)
+    
     exibirMenuPrincipal(arqClientes, arqFilmes, arqLocacoes, arqHash);
 
     fclose(arqClientes);

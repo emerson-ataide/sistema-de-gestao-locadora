@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "hash.h"
 
-// ... (as outras funções do hash.c permanecem aqui, sem alterações) ...
+
 void inicializarTabelaHash(FILE *arqHash) {
     RegistroHash reg;
     reg.codigo = -1;
@@ -84,7 +84,7 @@ TCliente* buscarHash(FILE *arqHash, FILE *arqCliente, int codigo) {
     return NULL;
 }
 
-// VERSÃO CORRIGIDA
+
 int removerHash(FILE *arqHash, int codigo) {
     int pos = funcaoHash(codigo);
     RegistroHash reg, anterior;
@@ -109,12 +109,12 @@ int removerHash(FILE *arqHash, int codigo) {
                     fseek(arqHash, posAtual, SEEK_SET);
                     fwrite(&reg, sizeof(RegistroHash), 1, arqHash);
                 }
-            } else { // Está no meio ou fim da lista de colisão
+            } else { 
                 anterior.proximo = reg.proximo;
                 fseek(arqHash, posAnterior, SEEK_SET);
                 fwrite(&anterior, sizeof(RegistroHash), 1, arqHash);
             }
-            return 1; // Sucesso na remoção
+            return 1; 
         }
 
         if(reg.proximo == -1) break;
@@ -126,7 +126,7 @@ int removerHash(FILE *arqHash, int codigo) {
         fread(&reg, sizeof(RegistroHash), 1, arqHash);
     }
 
-    return 0; // Cliente não encontrado
+    return 0; 
 }
 
 

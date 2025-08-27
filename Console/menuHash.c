@@ -54,7 +54,6 @@ void menuHash(FILE *arqClientes, FILE *arqHash) {
             case 3:
                 printf("Digite o codigo do cliente a ser removido: ");
                 scanf("%d", &codigo);
-                // VERIFICA O RETORNO DA FUNÇÃO REMOVER
                 if (removerHash(arqHash, codigo)) {
                     printf("Cliente removido com sucesso!\n");
                 } else {

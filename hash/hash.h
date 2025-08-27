@@ -16,7 +16,7 @@ void inicializarTabelaHash(FILE *arqHash);
 int funcaoHash(int chave);
 void inserirHash(FILE *arqHash, FILE *arqCliente, TCliente cliente);
 TCliente* buscarHash(FILE *arqHash, FILE *arqCliente, int codigo);
-int removerHash(FILE *arqHash, int codigo); // <-- TIPO DE RETORNO ALTERADO
+int removerHash(FILE *arqHash, int codigo); 
 void imprimirHash(FILE *arqHash);
 void popularHashComClientesIniciais(FILE *arqHash, FILE *arqClientes);
 
