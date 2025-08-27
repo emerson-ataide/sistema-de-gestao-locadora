@@ -12,7 +12,7 @@ void menuHash(FILE *arqClientes, FILE *arqHash) {
         printf("[2] Inserir cliente\n");
         printf("[3] Remover cliente\n");
         printf("[4] Imprimir Tabela Hash\n");
-        printf("[5] Voltar\n");
+        printf("[0] Voltar\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
