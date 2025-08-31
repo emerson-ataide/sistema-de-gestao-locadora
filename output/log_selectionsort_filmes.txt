@@ -1,5 +1,0 @@
-Comparacoes: 6 | Tempo: 0.000000s
-Comparacoes: 1 | Tempo: 0.000000s
-Comparacoes: 1 | Tempo: 0.000000s
-Comparacoes: 66 | Tempo: 0.000000s
-Comparacoes: 0 | Tempo: 0.000000s
