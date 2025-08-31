@@ -136,3 +136,9 @@ Numero de comparacoes: 287
 Tempo de execucao: 0.14 segundos
 ****************************
 
+****************************
+Intercalacao Otima - TCliente:
+Numero de comparacoes: 939
+Tempo de execucao: 0.09 segundos
+****************************
+

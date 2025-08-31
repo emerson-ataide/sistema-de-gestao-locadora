@@ -6,8 +6,8 @@
 
 void salvarDadosClientes(int comparacoes, double tempoExecucao)
 {
-   FILE *arquivo = fopen("log_classificacao.txt", "a");    
-   if (arquivo == NULL)
+    FILE *arquivo = fopen("log_classificacao.txt", "a");    
+    if (arquivo == NULL)
     {
         printf("Erro ao abrir arquivo\n");
         return;
@@ -31,8 +31,7 @@ void salvarDadosClassificacao(double tempoExecucao, int numParticoes) {
     fprintf(arquivo, "Selecao Natural - TCliente:\n");
     fprintf(arquivo, "Numero de particoes criadas: %d\n", numParticoes);
     fprintf(arquivo, "Tempo de execucao: %.2lf segundos\n", tempoExecucao);
-    fprintf(arquivo, "****************************\n\n"); // Adiciona uma linha em branco para separar as entradas
-
+    fprintf(arquivo, "****************************\n\n"); 
     fclose(arquivo);
 }
 
@@ -177,40 +176,9 @@ int selecaoNaturalCliente(FILE *entrada, int M)
                     else
                     {
                         comparacoes++;
-                        
-                        // Verifica se ainda há espaço no reservatório
-                        if (tamanhoReservatorio < (M - tamanhoMemoria))
-                        {
-                            reservatorio[tamanhoReservatorio++] = *novoRegistro;
-                            printf("Registro movido para reservatorio: ID = %d\n", novoRegistro->id);
-                        }
-                        else
-                        {
-                            // Reservatório cheio: cria nova partição antes de inserir o novo registro
-                            fclose(saida);
-                            printf("Reservatório cheio. Criando nova partição %d.\n", ++numParticao);
-    
-                             sprintf(nomeArquivo, "particoes/cliente_particao_%d.dat", numParticao);
-
-
-                            saida = fopen(nomeArquivo, "wb");
-                            if (!saida)
-                            {
-                                printf("Erro ao criar novo arquivo de particao!\n");
-                                fclose(entrada);
-                                return -1;
-                            }
-    
-                            // Transferir registros do reservatório para a memória
-                            for (int i = 0; i < tamanhoReservatorio; i++)
-                            {
-                                inserirMemoriaCliente(memoria, &tamanhoMemoria, reservatorio[i]);
-                            }
-                            tamanhoReservatorio = 0;
-    
-                            // Agora podemos adicionar o novo registro ao reservatório
-                            reservatorio[tamanhoReservatorio++] = *novoRegistro;
-                        }
+                        // O registro é "congelado" e movido para o reservatório sem restrições de tamanho aqui.
+                        reservatorio[tamanhoReservatorio++] = *novoRegistro;
+                        printf("Registro movido para reservatorio: ID = %d\n", novoRegistro->id);
                     }
                     free(novoRegistro);
                 }
