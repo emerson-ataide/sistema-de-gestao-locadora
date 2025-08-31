@@ -1,0 +1,12 @@
+# Ignorar a pasta de output completa, que contém partições e logs
+/output/
+
+# Ignorar ficheiros temporários
+*.tmp
+
+# Ignorar executáveis e ficheiros compilados
+*.exe
+*.o
+
+# Ignorar logs que possam ser criados na pasta principal
+*.txt
