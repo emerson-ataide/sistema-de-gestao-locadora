@@ -12,9 +12,8 @@
 #include "menuHash.c"
 #include "menuHash.h"
 
-#define M_SELECAO_NATURAL 7
+#define M_SELECAO_NATURAL 6
 
-// Função para calcular quantos registros tem no arquivo
 int tamanhoArquivo(FILE *arq, size_t tamanhoRegistro) {
     fseek(arq, 0, SEEK_END);
     long tamanhoArquivo = ftell(arq);
@@ -205,7 +204,7 @@ void exibirMenuPrincipal(FILE *arqClientes, FILE *arqFilmes, FILE *arqLocacoes, 
                 imprimirBaseFilme(arqFilmes);
                 break;
 
-            case 6: { //  Ordenação Externa
+            case 6: { 
                 int subOpcao;
                 int numParticoes;
 
@@ -237,6 +236,8 @@ void exibirMenuPrincipal(FILE *arqClientes, FILE *arqFilmes, FILE *arqLocacoes, 
                             system("rm -f particoes/*.dat");
                         #endif
                     
+                        int N_RESERVATORIO = 6; 
+                        printf("Tamanho do reservatorio (N) fixado em %d.\n", N_RESERVATORIO);
                         numParticoes = selecaoNaturalCliente(arqClientes, M_SELECAO_NATURAL);
 
                         FILE *temp = fopen("num_particoes.tmp", "w");

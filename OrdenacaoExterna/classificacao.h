@@ -10,6 +10,7 @@
 
 // *********************************************** ENTIDADE CLIENTE ***********************************************
 
+// AQUI ESTÁ A CORREÇÃO: o parâmetro extra 'n' foi removido.
 int selecaoNaturalCliente(FILE *entrada, int M);
 
 void inserirMemoriaCliente(TCliente heap[], int *n, TCliente novo);
@@ -23,7 +24,5 @@ void trocarCliente(TCliente *a, TCliente *b);
 void salvarDadosClassificacao(double tempoExecucao, int numParticoes);
 
 void verificaParticoesCliente(int numParticoes);
-
-
 
 #endif // ORDENACAOEXTERNA_H_INCLUDED
