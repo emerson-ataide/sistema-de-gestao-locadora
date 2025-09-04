@@ -65,8 +65,8 @@ int selecaoNaturalCliente(FILE *entrada, int M) {
 
     clock_t inicio = clock();
     
-    TCliente memoria[M]; // O HEAP (continua na RAM)
-    FILE *arqReservatorio; // O RESERVATÓRIO (agora em disco)
+    TCliente memoria[M];  
+    FILE *arqReservatorio; 
 
     int tamanhoMemoria = 0;
     int tamanhoReservatorio = 0;
