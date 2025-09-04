@@ -4,7 +4,7 @@
 #include <time.h>
 #include "classificacao.h"
 
-// ... (As funções auxiliares como salvarDados, trocarCliente, memMinima, etc., não mudam) ...
+// As funções auxiliares (salvarDados, trocarCliente, memMinima, etc.) não mudam.
 void salvarDadosClassificacao(double tempoExecucao, int numParticoes) {
     FILE *arquivo = fopen("log_classificacao.txt", "a");
     if (arquivo == NULL) {
@@ -55,6 +55,7 @@ void inserirMemoriaCliente(TCliente memoria[], int *n, TCliente novo) {
     }
 }
 
+// Função principal com as impressões restauradas
 int selecaoNaturalCliente(FILE *entrada, int M) {
     entrada = fopen("ArquivosDat/clientes.dat", "r+b");
     if (entrada == NULL) {
@@ -64,13 +65,12 @@ int selecaoNaturalCliente(FILE *entrada, int M) {
 
     clock_t inicio = clock();
     
-    
-    TCliente memoria[M]; // O HEAP
-    TCliente reservatorio[M]; // O RESERVATÓRIO
+    TCliente memoria[M]; // O HEAP (continua na RAM)
+    FILE *arqReservatorio; // O RESERVATÓRIO (agora em disco)
+
     int tamanhoMemoria = 0;
     int tamanhoReservatorio = 0;
    
-
     int fimDeArquivo = 0;
     char nomeArquivo[50];
     int numParticao = 1;
@@ -79,7 +79,14 @@ int selecaoNaturalCliente(FILE *entrada, int M) {
     sprintf(nomeArquivo, "particoes/cliente_particao_%d.dat", numParticao);
     saida = fopen(nomeArquivo, "wb");
 
-    // Passo 1: Ler M registros do arquivo para a memória (heap)
+    arqReservatorio = fopen("particoes/reservatorio.tmp", "w+b");
+    if (arqReservatorio == NULL) {
+        printf("Erro ao criar arquivo de reservatório.\n");
+        fclose(entrada);
+        return -1;
+    }
+
+    // Passo 1: Carregar a memória inicial
     for (int i = 0; i < M; i++) {
         TCliente *cliente = leCliente(entrada);
         if (cliente) {
@@ -90,15 +97,17 @@ int selecaoNaturalCliente(FILE *entrada, int M) {
             break;
         }
     }
-    // Constrói a propriedade de heap
+    
+    // Constrói o Heap inicial
     for (int i = tamanhoMemoria / 2 - 1; i >= 0; i--) {
         memMinimaCliente(memoria, tamanhoMemoria, i);
     }
 
     while (tamanhoMemoria > 0) {
-        // Passo 2 e 3: Seleciona o menor do heap e grava na partição
         TCliente menor = extrairMinCliente(memoria, &tamanhoMemoria);
         salvaCliente(&menor, saida);
+        
+        // ADICIONADO: Impressão para mostrar o que foi salvo na partição
         printf("Salvo na particao %d: ID = %d\n", numParticao, menor.id);
 
         TCliente *novoRegistro = NULL;
@@ -113,53 +122,62 @@ int selecaoNaturalCliente(FILE *entrada, int M) {
             if (novoRegistro->id >= menor.id) {
                 inserirMemoriaCliente(memoria, &tamanhoMemoria, *novoRegistro);
             } else {
-                reservatorio[tamanhoReservatorio++] = *novoRegistro;
+                salvaCliente(novoRegistro, arqReservatorio);
+                tamanhoReservatorio++; 
+                // ADICIONADO: Impressão para mostrar o que foi para o reservatório em disco
                 printf("Registro movido para RESERVATORIO: ID = %d (Ocupacao: %d/%d)\n", novoRegistro->id, tamanhoReservatorio, M);
             }
             free(novoRegistro);
         }
 
-
         if (tamanhoReservatorio >= M || (fimDeArquivo && tamanhoMemoria == 0)) {
             
-            // A. Finaliza a partição atual esvaziando o que resta no heap
+            // ADICIONADO: Impressões para indicar o fim de uma partição
             printf("(Reservatorio cheio ou Fim de arquivo) ---\n");
             printf("Esvaziando o resto do HEAP na particao %d...\n", numParticao);
+            
             while (tamanhoMemoria > 0) {
                 TCliente resto = extrairMinCliente(memoria, &tamanhoMemoria);
                 salvaCliente(&resto, saida);
-                printf("Salvo  na particao %d: ID = %d\n", numParticao, resto.id);
+                // ADICIONADO: Impressão para mostrar os itens restantes do heap sendo salvos
+                printf("Salvo na particao %d: ID = %d\n", numParticao, resto.id);
             }
             fclose(saida);
             printf("--- Particao %d finalizada. ---\n", numParticao);
 
-            // Se não há mais nada no reservatório, o processo acabou.
             if (tamanhoReservatorio == 0) break;
 
-            // B. Inicia uma nova partição
             numParticao++;
             sprintf(nomeArquivo, "particoes/cliente_particao_%d.dat", numParticao);
             saida = fopen(nomeArquivo, "wb");
+            
+            // ADICIONADO: Impressões para indicar o início da nova partição e a leitura do disco
             printf("\n--- Particao %d iniciada ---\n", numParticao);
-
-            // C. Copia os registros do RESERVATÓRIO para o HEAP
             printf("Copiando %d registros do RESERVATORIO para o HEAP...\n", tamanhoReservatorio);
-            for (int i = 0; i < tamanhoReservatorio; i++) {
-                memoria[i] = reservatorio[i];
-            }
-            tamanhoMemoria = tamanhoReservatorio;
-            tamanhoReservatorio = 0; // Esvazia o reservatório
 
-            // D. Reconstrói a propriedade de heap para os novos dados
+            rewind(arqReservatorio); 
+            tamanhoMemoria = 0;
+            TCliente *clienteDoReservatorio;
+            while ((clienteDoReservatorio = leCliente(arqReservatorio)) != NULL) {
+                memoria[tamanhoMemoria++] = *clienteDoReservatorio;
+                free(clienteDoReservatorio);
+            }
+            
+            fclose(arqReservatorio);
+            arqReservatorio = fopen("particoes/reservatorio.tmp", "w+b");
+            tamanhoReservatorio = 0;
+
             for (int i = tamanhoMemoria / 2 - 1; i >= 0; i--) {
                 memMinimaCliente(memoria, tamanhoMemoria, i);
             }
         }
-        // =================================================================================
     }
 
     if(saida) fclose(saida);
     fclose(entrada);
+    
+    fclose(arqReservatorio);
+    remove("particoes/reservatorio.tmp");
 
     clock_t fim = clock();
     double tempoExecucao = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
